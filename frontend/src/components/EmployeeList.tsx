@@ -31,13 +31,13 @@ const EmployeeList: React.FC<Props> = ({ onEdit }) => {
       {
         id: "1",
         name: "John Doe",
-        employeetype: "john.doe@example.com",
+        employeetype: "Intern",
         industry: "IT",
       },
       {
         id: "2",
         name: "Jane Smith",
-        employeetype: "jane.smith@example.com",
+        employeetype: "FTE",
         industry: "HR",
       },
     ],
