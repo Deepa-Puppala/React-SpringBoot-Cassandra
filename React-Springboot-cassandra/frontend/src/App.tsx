@@ -1,13 +1,11 @@
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import EmployeeList from "./components/EmployeeList";
-import EmployeeForm from "./components/EmployeeForm";
+import React from "react";
+import AppRouter from "./AppRouter";
+import { UserProvider } from "./Context/UserContext";
+
 function App() {
-  return (
-    <>
-      <EmployeeForm isEdit={false} />
-      <EmployeeList />
-    </>
-  );
+  return <AppRouter />;
 }
 
 export default App;

@@ -1,9 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // EmployeeList.jsx
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-import "./EmployeeList.scss";
-import apiClient from "./../apiClient";
-import EditEmployee from "./EditEmployee";
+import apiClient from "../../Services/apiClient";
+import EditEmployee from "../EditEmployee/EditEmployee";
 export interface Employee {
   id?: string;
   name: string;
@@ -17,8 +17,10 @@ interface EmployeeList {
 
 interface Props {
   onEdit?: (emp: Employee) => void;
+  updateAlter?: () => void;
+  alter?: boolean;
 }
-const EmployeeList: React.FC<Props> = ({ onEdit }) => {
+const EmployeeList: React.FC<Props> = ({ updateAlter, alter }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedEmp, setSelectedEmployee] = useState<Employee>({
     id: "",
@@ -27,37 +29,26 @@ const EmployeeList: React.FC<Props> = ({ onEdit }) => {
     industry: "",
   });
   const [employeesList, setEmployeesList] = useState<EmployeeList | null>({
-    employees: [
-      {
-        id: "1",
-        name: "John Doe",
-        employeetype: "john.doe@example.com",
-        industry: "IT",
-      },
-      {
-        id: "2",
-        name: "Jane Smith",
-        employeetype: "jane.smith@example.com",
-        industry: "HR",
-      },
-    ],
+    employees: [],
   });
 
   useEffect(() => {
     apiClient
-      .get("/api/employees")
+      .get("/api/getAll")
       .then((response) => {
+        console.log("coming ", response);
         setEmployeesList(() => ({
           employees: [...response.data],
         }));
       })
       .catch((error) => console.error("Error fetching employees:", error));
-  });
+  }, []);
 
   const handleEdit = (emp: Employee) => {
     console.log("set ", emp);
     setShowModal(true);
     setSelectedEmployee(emp);
+    updateAlter && updateAlter();
   };
   const handleDelete = (emp: Employee) => {
     if (confirm("Are you sure?")) {
@@ -66,6 +57,7 @@ const EmployeeList: React.FC<Props> = ({ onEdit }) => {
         .then((response) => {
           if (response.data.Status === "200") {
             alert(response.data.message);
+            updateAlter && updateAlter();
           } else {
             alert("no record found");
           }
